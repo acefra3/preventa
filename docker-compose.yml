@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: bluetab_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: btadmin
+      POSTGRES_PASSWORD: btlocal2025
+      POSTGRES_DB: bluetabpreventa
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U btadmin -d bluetabpreventa"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: bluetab_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@bluetab.net
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    profiles:
+      - tools
+
+volumes:
+  postgres_data:

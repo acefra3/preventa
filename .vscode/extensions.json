@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-pg",
+    "ms-azuretools.vscode-azureappservice",
+    "ms-azuretools.vscode-azurestaticwebapps",
+    "ms-azuretools.vscode-azuredatabases",
+    "ms-azuretools.vscode-azurestorage",
+    "eamodio.gitlens",
+    "humao.rest-client"
+  ]
+}

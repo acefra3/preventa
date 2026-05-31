@@ -1,0 +1,136 @@
+### Variables
+@base = http://localhost:3001/api
+@token = PEGAR_TOKEN_AQUI
+
+### ─── Health ───────────────────────────────────────────
+GET {{base}}/health
+
+### ─── Auth: Login Admin ────────────────────────────────
+# @name loginAdmin
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@bluetab.net",
+  "password": "admin123"
+}
+
+### Auth: Login Preventa
+# @name loginPreventa
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "ana.martinez@bluetab.net",
+  "password": "preventa123"
+}
+
+### Auth: Login Comercial
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "carlos.rueda@bluetab.net",
+  "password": "comercial123"
+}
+
+### Auth: Recovery
+POST {{base}}/auth/recovery
+Content-Type: application/json
+
+{
+  "email": "admin@bluetab.net"
+}
+
+### Auth: Me
+GET {{base}}/auth/me
+Authorization: Bearer {{token}}
+
+### ─── Proposals ────────────────────────────────────────
+GET {{base}}/proposals
+Authorization: Bearer {{token}}
+
+###
+GET {{base}}/proposals?status=en-progreso&priority=critica
+Authorization: Bearer {{token}}
+
+###
+GET {{base}}/proposals/{{proposalId}}
+Authorization: Bearer {{token}}
+
+### Crear propuesta (comercial)
+POST {{base}}/proposals
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Implementación DataLake",
+  "client": "Nutresa",
+  "description": "Migración completa a Azure DataLake Gen2",
+  "endDate": "2025-09-30",
+  "startDate": "2025-07-01",
+  "priority": "alta",
+  "estimatedValue": "USD 380,000",
+  "proposalType": "Arquitectura de datos",
+  "bantScore": 78,
+  "compositeScore": 74
+}
+
+### Actualizar avance (preventa)
+PATCH {{base}}/proposals/{{proposalId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "progressPct": 75
+}
+
+### Cambiar estado
+PATCH {{base}}/proposals/{{proposalId}}/status
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "status": "entregada-revision"
+}
+
+### ─── Revisions ─────────────────────────────────────────
+### Solicitar revisión (comercial)
+POST {{base}}/revisions/{{proposalId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "notes": "Falta el detalle de costos de licencias y el plan de capacitación del equipo cliente."
+}
+
+### Responder revisión (preventa)
+PATCH {{base}}/revisions/{{revisionId}}/respond
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "adjustDeadline": "2025-07-15",
+  "preventaNote": "Agregaremos la sección de costos y el plan de capacitación antes de esa fecha."
+}
+
+### ─── Dashboard ─────────────────────────────────────────
+GET {{base}}/dashboard/stats
+Authorization: Bearer {{token}}
+
+### ─── Users (admin) ────────────────────────────────────
+GET {{base}}/users
+Authorization: Bearer {{token}}
+
+GET {{base}}/users/preventa
+Authorization: Bearer {{token}}
+
+### Actualizar usuario
+PATCH {{base}}/users/{{userId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "role": "preventa",
+  "active": true
+}

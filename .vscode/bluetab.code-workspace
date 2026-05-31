@@ -1,0 +1,93 @@
+{
+  "folders": [
+    { "name": "Backend", "path": "./backend" },
+    { "name": "Frontend", "path": "./frontend" },
+    { "name": "Root", "path": "." }
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/dist": true
+    },
+    "debug.internalConsoleOptions": "neverOpen"
+  },
+  "extensions": {
+    "recommendations": [
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "ms-vscode.vscode-typescript-next",
+      "bradlc.vscode-tailwindcss",
+      "prisma.prisma",
+      "ms-azuretools.vscode-docker",
+      "ms-azuretools.vscode-azureappservice",
+      "ms-azuretools.vscode-azuredatabases",
+      "ms-azuretools.vscode-azurestorage",
+      "ms-azuretools.vscode-bicep",
+      "humao.rest-client",
+      "mtxr.sqltools",
+      "mtxr.sqltools-driver-pg",
+      "PKief.material-icon-theme",
+      "christian-kohler.path-intellisense"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Backend: Debug",
+        "type": "node",
+        "request": "launch",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "dev"],
+        "cwd": "${workspaceFolder:Backend}",
+        "skipFiles": ["<node_internals>/**"],
+        "envFile": "${workspaceFolder:Backend}/.env",
+        "console": "integratedTerminal"
+      },
+      {
+        "name": "Frontend: Debug",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:5173",
+        "webRoot": "${workspaceFolder:Frontend}/src"
+      }
+    ],
+    "compounds": [
+      {
+        "name": "Full Stack",
+        "configurations": ["Backend: Debug", "Frontend: Debug"]
+      }
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Docker: Start DB",
+        "type": "shell",
+        "command": "docker-compose up -d",
+        "options": { "cwd": "${workspaceFolder:Root}" },
+        "group": "build",
+        "presentation": { "reveal": "always" }
+      },
+      {
+        "label": "Backend: Migrate",
+        "type": "shell",
+        "command": "npm run migrate",
+        "options": { "cwd": "${workspaceFolder:Backend}" }
+      },
+      {
+        "label": "Backend: Seed",
+        "type": "shell",
+        "command": "npm run seed",
+        "options": { "cwd": "${workspaceFolder:Backend}" }
+      }
+    ]
+  }
+}
